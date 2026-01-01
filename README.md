@@ -1,4 +1,131 @@
+MTCNN Face Detection Workflow
+-----------------------------
+This repository provides a **public reference implementation and engineering-oriented analysis**
+of the MTCNN (Multi-task Cascaded Convolutional Networks) face detection and alignment workflow.
+
+It includes:
+- A PyTorch-based MTCNN pipeline reference
+- Step-by-step documentation of the detection stages (P-Net / R-Net / O-Net)
+- A **reproducible benchmarking framework** to evaluate performance impact of implementation changes
+
+Technical article (design rationale and background):
+- *Understanding MTCNN: A Practical Guide to Multi-Task Cascaded Convolutional Networks*  
+  https://medium.com/@ace.lin0121/understanding-mtcnn-a-practical-guide-to-multi-task-cascaded-convolutional-networks-for-face-efc6cc2a433f
+
+---
+
+Purpose
+-----------------------------
+Beyond providing a functional MTCNN reference, this project focuses on **engineering practices**
+that are often under-documented in academic examples, including:
+
+- Performance measurement methodology
+- Before/after comparison of implementation changes
+- Reproducibility of experimental results
+- Clear separation between algorithmic behavior and system-level cost
+
+This makes the repository suitable not only for learning MTCNN,
+but also for **practical system optimization and evaluation**.
+
+
+MTCNN Pipeline Overview
+-----------------------------
+The workflow follows the standard three-stage cascade:
+
+1. **P-Net (Proposal Network)**  
+   Generates candidate face bounding boxes across image scales.
+
+2. **R-Net (Refine Network)**  
+   Filters false positives and refines bounding box locations.
+
+3. **O-Net (Output Network)**  
+   Produces final bounding boxes and facial landmarks.
+
+Each stage progressively trades computation cost for accuracy,
+which makes performance evaluation and batching behavior especially important in real systems.
+
+
+Reproducible Benchmark Framework
+-----------------------------
+
+To objectively evaluate performance impact, this repository includes a lightweight
+benchmarking framework under the `benchmark/` directory.
+
+What is measured
+----------------------------
+- **Latency**
+  - Mean evaluation latency per batch
+- **Memory**
+  - Process RSS memory before and after evaluation
+- **Accuracy**
+  - Top-1 classification accuracy on a fixed evaluation subset
+- **Reproducibility**
+  - Fixed dataset split
+  - Exported environment metadata
+  - JSON-based raw results
+
+All benchmarks are designed to be **repeatable and auditable**.
+
+Benchmark Methodology
+-----------------------------
+- Dataset is organized in ImageFolder format
+- A fixed train/test split is generated once and reused
+- Baseline and optimized implementations are evaluated on the **same input set**
+- Results are saved as JSON and compared using an automated script
+
+Relevant scripts:
+- `benchmark/scripts/prepare_subset.py`
+- `benchmark/benchmarks/run_benchmark.py`
+- `benchmark/benchmarks/compare_results.py`
+
+
+Benchmark Results (Before vs After)
+-----------------------------
+The following table summarizes the evaluation-only benchmark results
+using the same dataset split and batch configuration.
+
+| Metric | Before | After | Δ% |
+|---|---:|---:|---:|
+| RSS memory (after) [MB] | 855.53 | 855.53 | +0.00% |
+| Evaluation latency per batch (ms) | *see JSON* | *see JSON* | improved |
+| Top-1 accuracy (%) | 100.0 | 100.0 | +0.00% |
+
+Raw result files:
+- `benchmark/result/baseline_eval_only.json`
+- `benchmark/result/after_eval_only.json`
+- `benchmark/result/compare_eval_only.md`
+
+These artifacts are intentionally kept in the repository
+to allow independent verification of the results.
+
+Notes on Interpretation
+-----------------------------
+- Accuracy is intentionally held constant to isolate performance effects
+- Memory usage remains stable, indicating no hidden buffering or leaks
+- Latency differences are attributable to implementation-level optimizations,
+  not algorithmic changes
+
+This approach reflects common engineering practice in production ML systems,
+where **performance predictability and reproducibility** are as important as raw accuracy.
+
+Summary
+-----------------------------
+This repository demonstrates how a well-known algorithm (MTCNN)
+can be treated as a **system-level engineering problem** rather than a black-box model.
+
+By combining:
+- Clear pipeline documentation
+- Reproducible benchmarking
+- Transparent before/after analysis
+
+the project aims to serve as a practical reference for engineers
+working on real-world face detection and ML inference pipelines.
+
+
+
+
 Technical Article:  
+------------------
 Understanding MTCNN: A Practical Guide to Multi-Task Cascaded Convolutional Networks  
 https://medium.com/@ace.lin0121/understanding-mtcnn-a-practical-guide-to-multi-task-cascaded-convolutional-networks-for-face-efc6cc2a433f
 
