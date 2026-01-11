@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-01-01 15:49:58",
+  "hw_sw": {
+    "python": "3.11.2 (main, Apr 28 2025, 14:11:48) [GCC 12.2.0]",
+    "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+    "machine": "x86_64",
+    "cpu_logical": 56,
+    "ram_total_gb": 4.0
+  },
+  "args": {
+    "seed": 1337,
+    "note": "lite run (no torch/torchvision)"
+  },
+  "metrics": {
+    "task": "eval_only_baseline",
+    "batch_size": 4,
+    "num_test_samples": 4,
+    "eval_latency_ms_per_batch_mean": 0.22318900005302567,
+    "accuracy_top1_percent": 100.0,
+    "wall_time_s_total": 0.00023740099993574404,
+    "memory_rss_mb_before": 855.53125,
+    "memory_rss_mb_after": 855.53125,
+    "cuda_peak_mem_mb": null
+  }
+}
